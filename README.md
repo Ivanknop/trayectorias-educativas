@@ -1,5 +1,7 @@
 # Trayectorias escolares en Argentina
 
+**👉 Ver el visor: <https://ivanknop.github.io/trayectorias-educativas/index.html>**
+
 Análisis de las bases de **Trayectoria** del Relevamiento Anual (RA) de la DiNIEE (Ministerio de Educación),
 educación común, **ciclos lectivos 2010 a 2024**. Incluye un visor interactivo para explorar repitencia, abandono,
 promoción, matrícula, egreso, pérdida entre años y desplazamiento estatal → privado, por provincia, nivel, sector,

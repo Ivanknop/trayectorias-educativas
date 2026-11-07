@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url }}index.html
     steps:
       - name: Publicar en GitHub Pages
         id: deploy
