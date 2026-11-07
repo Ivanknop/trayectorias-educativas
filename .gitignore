@@ -19,7 +19,6 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 .ruff_cache/
-# Plantilla: cada proyecto derivado versiona su propio lock
 
 # Secrets y configuración local de Claude
 .env
