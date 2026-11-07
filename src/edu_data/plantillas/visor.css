@@ -157,7 +157,7 @@ a { color: var(--acento); }
 .opciones label:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
 .aviso { font-size: 12px; margin: 4px 0 0; max-width: 32ch; }
 
-.grafico { width: 100%; min-height: 420px; }
+.grafico { width: 100%; min-height: 340px; }
 .alertas { padding-left: 0; list-style: none; font-size: 13px; color: var(--tinta-2); }
 .alertas li::before { content: "✕ "; color: var(--alerta); font-weight: 700; }
 .tabla-datos summary { cursor: pointer; color: var(--acento); margin-top: 8px; }
@@ -174,3 +174,18 @@ th { color: var(--tinta-2); font-weight: 600; }
 .sin-corte { white-space: nowrap; }
 .tabla-avisos td:nth-child(2) { white-space: nowrap; }
 .tabla-avisos td:nth-child(3) { color: var(--tinta-2); min-width: 9em; }
+
+/* Celular: menos relleno en el panel y avisos como tarjetas (la tabla de 4 columnas no entra). */
+@media (max-width: 560px) {
+  .panel { padding: 16px 10px; border-radius: 10px; }
+  .panel h2, .panel > div > p, .controles, .alertas, .tabla-datos { margin-inline: 6px; }
+  .guia { padding-block: 24px 48px; }
+  .guia h1 { font-size: 1.6rem; }
+  .tabla-avisos thead { display: none; }
+  .tabla-avisos, .tabla-avisos tbody, .tabla-avisos tr, .tabla-avisos td { display: block; width: auto; }
+  .tabla-avisos tr { padding: 10px 0; border-bottom: 1px solid var(--grilla); }
+  .tabla-avisos td, .tabla-avisos td:first-child { border: 0; padding: 0; width: auto; }
+  .tabla-avisos td:nth-child(2), .tabla-avisos td:nth-child(3) { display: inline; white-space: normal; }
+  .tabla-avisos td:nth-child(2)::after { content: " · "; }
+  .tabla-avisos td:nth-child(4) { margin-top: 4px; }
+}

@@ -243,6 +243,20 @@
     }));
   }
 
+  // Debajo de este ancho (px del gráfico) el eje muestra un año de cada dos y no hay etiquetas directas.
+  const ANCHO_ANGOSTO = 560;
+  let anchoRender = 0;
+
+  // Años del eje: uno de cada dos en pantallas angostas, contando desde el último ciclo para que siempre se vea.
+  function ejeAnios(ancho) {
+    const paso = ancho < ANCHO_ANGOSTO ? 2 : 1;
+    const ultimo = D.ciclos.length - 1;
+    const valores = D.ciclos.filter((_, i) => (ultimo - i) % paso === 0);
+    const abreviar = ancho < 400;
+    const textos = valores.map((c, i) => (abreviar && i > 0 ? "’" + String(c).slice(2) : String(c)));
+    return { tickmode: "array", tickvals: valores, ticktext: textos };
+  }
+
   // ---------- Render ----------
   function render() {
     const vacio = document.getElementById("panel-vacio");
@@ -312,25 +326,37 @@
       };
     });
 
-    const etiquetas = series.length <= 4 && series.length > 1 ? etiquetasDirectas(series, cssVar) : [];
-
     const ancho = document.getElementById("grafico").clientWidth;
+    anchoRender = ancho;
+    const angosto = ancho < ANCHO_ANGOSTO;
+    const conLeyenda = series.length > 1;
+    // En pantallas angostas las etiquetas al final de la línea se cortan: queda solo la leyenda.
+    const etiquetas = !angosto && conLeyenda && series.length <= 4 ? etiquetasDirectas(series, cssVar) : [];
+    const filasLeyenda = conLeyenda ? (angosto ? series.length : Math.ceil(series.length / 3)) : 0;
+    const margen = { l: angosto ? 8 : 16, r: etiquetas.length ? Math.min(170, ancho * 0.28) : 12, t: 24, b: 36 };
+    const altoTrazado = angosto ? 280 : 360;
+    const alto = altoTrazado + margen.t + margen.b + filasLeyenda * 22;
+
     const layout = {
+      height: alto,
       paper_bgcolor: cssVar("--superficie"),
       plot_bgcolor: cssVar("--superficie"),
-      font: { family: "system-ui, -apple-system, Segoe UI, sans-serif", color: cssVar("--tinta"), size: 13 },
+      font: {
+        family: "system-ui, -apple-system, Segoe UI, sans-serif", color: cssVar("--tinta"), size: angosto ? 12 : 13,
+      },
       separators: ",.",
-      margin: { l: 64, r: etiquetas.length ? Math.min(170, ancho * 0.28) : 16, t: 24, b: 40 },
+      margin: margen,
       hovermode: "closest",
-      showlegend: series.length > 1,
-      legend: { orientation: "h", y: -0.14, x: 0 },
+      hoverlabel: { font: { size: angosto ? 12 : 13 } },
+      showlegend: conLeyenda,
+      legend: { orientation: "h", x: 0, xanchor: "left", yanchor: "top", y: -32 / altoTrazado },
       xaxis: {
-        dtick: 1, range: [D.ciclos[0] - 0.5, D.ciclos[D.ciclos.length - 1] + 0.5],
+        ...ejeAnios(ancho), range: [D.ciclos[0] - 0.5, D.ciclos[D.ciclos.length - 1] + 0.5],
         showgrid: false, linecolor: cssVar("--eje"), tickfont: { color: cssVar("--tinta-tenue") },
-        tickangle: ancho < 560 ? -45 : 0, fixedrange: true,
+        tickangle: 0, fixedrange: true,
       },
       yaxis: {
-        gridcolor: cssVar("--grilla"), linecolor: cssVar("--eje"),
+        automargin: true, gridcolor: cssVar("--grilla"), linecolor: cssVar("--eje"),
         tickfont: { color: cssVar("--tinta-tenue") }, rangemode: "tozero",
         zeroline: true, zerolinecolor: cssVar("--eje"), zerolinewidth: 1.5,
         ticksuffix: sufijo, fixedrange: true,
@@ -345,7 +371,7 @@
         ...etiquetas,
       ],
     };
-    Plotly.react("grafico", trazas, layout, { displaylogo: false, responsive: true,
+    Plotly.react("grafico", trazas, layout, { displaylogo: false, responsive: true, displayModeBar: !angosto,
       modeBarButtonsToRemove: ["lasso2d", "select2d", "zoom2d", "pan2d", "zoomIn2d", "zoomOut2d", "autoScale2d"] });
 
     let definicion = meta.descripcion;
@@ -381,4 +407,13 @@
   render();
   window.addEventListener("hashchange", () => { leerHash(); marcarSeleccion(); render(); });
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+  // Al girar el celular o cambiar el ancho se recalculan años, leyenda y alto del gráfico.
+  let esperaResize;
+  window.addEventListener("resize", () => {
+    clearTimeout(esperaResize);
+    esperaResize = setTimeout(() => {
+      const ancho = document.getElementById("grafico").clientWidth;
+      if (estado.prov && Math.abs(ancho - anchoRender) > 20) render();
+    }, 150);
+  });
 })();
