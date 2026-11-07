@@ -7,5 +7,6 @@
 *.xls binary
 *.sav binary
 *.dta binary
-# Datos crudos: se guardan byte a byte (los CSV oficiales vienen en latin-1 con CRLF)
-data/raw/** -text
+
+# Crudos byte a byte: los oficiales suelen venir con CRLF y latin-1; normalizarlos los alteraría
+data/raw/** -text -eol

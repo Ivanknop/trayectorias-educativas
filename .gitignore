@@ -7,6 +7,9 @@ data/processed/*
 !data/processed/.gitkeep
 outputs/*
 !outputs/.gitkeep
+# Para versionar crudos que sean datos abiertos y livianos (< 100 MB, insumo de la CI),
+# descomentar y ajustar el patrón:
+# !data/raw/*.csv
 
 # Certificados
 .devcontainer/certs/*.crt
