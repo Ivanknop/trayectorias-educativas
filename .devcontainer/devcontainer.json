@@ -1,0 +1,58 @@
+{
+  "name": "analisis_trayectorias",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+    // Proxy: no se configura acá, Docker lo inyecta en build y contenedor desde ~/.docker/config.json (ver README)
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "lts" },
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+
+  "remoteUser": "vscode",
+
+  "containerEnv": {
+    // Login, historial y config de Claude Code viven en el volumen de abajo
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude",
+    // El venv va fuera del workspace: no ensucia el repo
+    "UV_PROJECT_ENVIRONMENT": "/home/vscode/.venv",
+    "UV_LINK_MODE": "copy",
+    "PYTHONUNBUFFERED": "1",
+    // Si hay certificados corporativos en .devcontainer/certs, Python/requests/uv los usan
+    "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt",
+    "SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt",
+    "NODE_EXTRA_CA_CERTS": "/etc/ssl/certs/ca-certificates.crt",
+    "UV_SYSTEM_CERTS": "1"
+  },
+
+  "mounts": [
+    // Volumen nombrado: sobrevive a rebuilds (una sesión de Claude por máquina)
+    "source=edu-data-claude-config,target=/home/vscode/.claude,type=volume",
+    // Cache de uv: los rebuilds no re-descargan paquetes
+    "source=edu-data-uv-cache,target=/home/vscode/.cache/uv,type=volume"
+  ],
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "charliermarsh.ruff",
+        "mechatroner.rainbow-csv"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/home/vscode/.venv/bin/python",
+        "jupyter.notebookFileRoot": "${workspaceFolder}",
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true
+        }
+      }
+    }
+  }
+}

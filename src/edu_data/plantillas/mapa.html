@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trayectorias escolares · Mapa</title>
+<link rel="stylesheet" href="visor.css">
+<script src="plotly.min.js"></script>
+<script src="datos.js"></script>
+<script src="geo.js"></script>
+</head>
+<body>
+<header class="barra">
+  <a href="index.html" class="volver">← Guía</a>
+  <h1>Trayectorias escolares</h1>
+</header>
+
+<main class="tablero">
+  <section class="zona-mapa" aria-label="Mapa de provincias">
+    <div class="encabezado-mapa">
+      <button type="button" id="btn-pais" class="boton-secundario">Total país</button>
+      <p id="nombre-hover" class="tenue" aria-live="polite">Tocá una provincia</p>
+    </div>
+    <div class="mapa">
+      <svg id="svg-mapa" role="group" aria-label="Provincias de Argentina"></svg>
+      <figure class="recuadro">
+        <svg id="svg-caba" role="group" aria-label="Ciudad de Buenos Aires (ampliada)"></svg>
+        <figcaption>CABA</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="panel" id="panel" aria-live="polite">
+    <div id="panel-vacio" class="panel-vacio">
+      <p>Elegí una provincia en el mapa o el total país para ver su evolución.</p>
+    </div>
+
+    <div id="panel-contenido" hidden>
+      <h2 id="titulo-panel"></h2>
+      <p id="subtitulo-panel" class="tenue"></p>
+
+      <form id="controles" class="controles">
+        <fieldset>
+          <legend>Indicador</legend>
+          <div class="opciones" id="opc-ind"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Medida</legend>
+          <div class="opciones">
+            <label><input type="radio" name="medida" value="cantidad"> Cantidad</label>
+            <label><input type="radio" name="medida" value="tasa"> Tasa (%)</label>
+          </div>
+          <p id="aviso-medida" class="tenue aviso" hidden></p>
+        </fieldset>
+        <fieldset>
+          <legend>Nivel</legend>
+          <div class="opciones">
+            <label><input type="radio" name="nivel" value="primaria"> Primaria</label>
+            <label><input type="radio" name="nivel" value="secundaria"> Secundaria</label>
+            <label><input type="radio" name="nivel" value="ambos"> Ambos</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Sexo</legend>
+          <div class="opciones">
+            <label><input type="radio" name="sexo" value="total"> Total</label>
+            <label><input type="radio" name="sexo" value="desagregar"> Desagregar</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Ámbito</legend>
+          <div class="opciones">
+            <label><input type="radio" name="ambito" value="total"> Total</label>
+            <label><input type="radio" name="ambito" value="desagregar"> Desagregar</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Sector</legend>
+          <div class="opciones">
+            <label><input type="radio" name="sector" value="total"> Total</label>
+            <label><input type="radio" name="sector" value="desagregar"> Desagregar</label>
+          </div>
+          <p id="aviso-sector" class="tenue aviso" hidden></p>
+        </fieldset>
+      </form>
+
+      <div id="grafico" class="grafico"></div>
+      <p id="nota-series" class="tenue" hidden></p>
+      <p id="definicion" class="tenue"></p>
+      <ul id="alertas-panel" class="alertas"></ul>
+
+      <details class="tabla-datos">
+        <summary>Ver tabla de valores</summary>
+        <div class="tabla-scroll"><table id="tabla"></table></div>
+      </details>
+    </div>
+  </section>
+</main>
+<script src="visor.js"></script>
+</body>
+</html>

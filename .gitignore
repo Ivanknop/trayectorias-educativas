@@ -1,0 +1,31 @@
+# Datos: no se versionan (solo la estructura y el catálogo)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+# Excepción: los CSV crudos de trayectoria (datos abiertos) son el único insumo que necesita la Action.
+!data/raw/*Trayectoria - agregada(in).csv
+!data/processed/.gitkeep
+outputs/*
+!outputs/.gitkeep
+
+# Certificados
+.devcontainer/certs/*.crt
+.devcontainer/certs/*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+# Plantilla: cada proyecto derivado versiona su propio lock
+
+# Secrets y configuración local de Claude
+.env
+.env.*
+.claude/settings.local.json
+
+# SO / editores
+.DS_Store
+Thumbs.db

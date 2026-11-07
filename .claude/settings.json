@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv run:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv add:*)",
+      "Bash(uv tree:*)",
+      "Bash(ls:*)",
+      "Bash(head:*)",
+      "Bash(wc:*)",
+      "Bash(file:*)",
+      "Bash(csvstat:*)",
+      "Bash(csvcut:*)",
+      "Bash(jq:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [
+      "Edit(data/raw/**)",
+      "Write(data/raw/**)",
+      "Bash(rm -rf data/raw:*)",
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ]
+  }
+}

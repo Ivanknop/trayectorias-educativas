@@ -1,0 +1,62 @@
+name: Visor de trayectorias
+
+# Construye el visor desde los CSV crudos y lo deja como artifact temporal. Repo público: cualquier usuario
+# con sesión en GitHub puede descargarlo mientras exista. No se versiona ni se publica en GitHub Pages.
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "data/raw/**"
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/visor.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.7"
+          enable-cache: true
+
+      - name: Instalar Python y dependencias
+        run: |
+          uv python install 3.12
+          uv sync --locked
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Tests
+        run: uv run pytest -q
+
+      - name: Construir visor
+        run: uv run python -m edu_data.visor
+
+      - name: Controles de calidad
+        run: uv run python -m edu_data.validacion > /dev/null
+
+      - name: Subir visor
+        uses: actions/upload-artifact@v4
+        with:
+          name: visor-trayectorias
+          path: outputs/visor/
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Subir controles de calidad
+        uses: actions/upload-artifact@v4
+        with:
+          name: validacion
+          path: outputs/validacion_*.csv
+          retention-days: 30

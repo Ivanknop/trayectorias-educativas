@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trayectorias escolares</title>
+<link rel="stylesheet" href="visor.css">
+</head>
+<body>
+<main class="guia">
+  <header>
+    <h1>Trayectorias escolares en Argentina</h1>
+    <p class="bajada">
+      Repitencia, abandono, promoción, matrícula y egreso de primaria y secundaria,
+      por provincia, para los ciclos lectivos {{CICLO_INICIO}} a {{CICLO_FIN}}.
+    </p>
+    <p class="tenue">Datos en: <a href="https://www.argentina.gob.ar/educacion/evaluacion-e-informacion-educativa/datos-abiertos-de-la-secretaria-de-educacion" target="_blank" rel="noopener noreferrer">https://www.argentina.gob.ar/educacion/evaluacion-e-informacion-educativa/datos-abiertos-de-la-secretaria-de-educacion</a></p>
+    <a class="boton-principal" href="mapa.html">Ir al mapa</a>
+  </header>
+
+  <section>
+    <h2>Cómo explorar</h2>
+    <ol class="pasos">
+      <li>Elegí una provincia en el mapa, o el <strong>total país</strong>.</li>
+      <li>Elegí el indicador, si querés <strong>cantidad</strong> o <strong>tasa</strong>, y el nivel.</li>
+      <li>
+        Por defecto se ve el total. Con los botones <strong>Sexo</strong>, <strong>Ámbito</strong>
+        (urbano/rural) y <strong>Sector</strong> (estatal/privado) se separa en líneas; se pueden combinar.
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Indicadores</h2>
+    <ul class="lista">
+{{INDICADORES}}
+    </ul>
+    <p class="tenue">
+      Las tasas se calculan sobre la suma de los alumnos del grupo elegido, no como promedio de tasas.
+      "Ambos niveles" suma primaria y secundaria; deja afuera unos pocos alumnos sin año de estudio definido.
+    </p>
+    <p>
+      <strong>Dónde termina la primaria</strong> depende de la provincia (6 o 7 años), según la
+      estructura oficial del nivel. Los egresados de primaria son los promovidos del último grado.
+    </p>
+  </section>
+
+  <section>
+    <h2>Avisos de calidad</h2>
+    <p class="tenue">
+      Estos datos se muestran igual, pero en los gráficos se marcan con una cruz.
+      Al pasar el mouse se lee el problema.
+    </p>
+    <div class="tabla-scroll">
+      <table class="tabla-avisos">
+        <thead><tr><th>Ciclo</th><th>Nivel</th><th>Dónde</th><th>Problema</th></tr></thead>
+        <tbody>
+{{ALERTAS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+</body>
+</html>
