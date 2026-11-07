@@ -40,8 +40,5 @@ Visor: `uv run python -m edu_data.visor` → `outputs/visor/index.html` (secció
   supera el límite de GitHub y no se sube; solo hace falta para regenerar ese recurso
   (`uv run python -m edu_data.geo descargar`).
 - **No se suben**: `data/processed/`, `outputs/`, el GeoJSON del IGN y el diccionario.
-- **La Action** `.github/workflows/visor.yml` corre lint y tests, construye el visor y los controles de calidad, y
-  los deja como *artifacts* (`visor-trayectorias` y `validacion`), que se borran a los 30 días. El repo es
-  público: cualquier usuario con sesión en GitHub puede descargarlos mientras existan. No se publica en GitHub
-  Pages.
-- **Ojo**: el visor incluye los datos procesados (`datos.js`). Quien tenga el visor tiene los datos.
+- **La Action** `.github/workflows/visor.yml` corre lint y tests, construye el visor y lo **publica en GitHub
+  Pages**: `https://<usuario>.github.io/<repo>/`. El sitio es público.

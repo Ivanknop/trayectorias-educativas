@@ -23,7 +23,7 @@ Fuente: [datos abiertos de la Secretaría de Educación](https://www.argentina.g
 | `src/edu_data/geo.py` | Cartografía de provincias (IGN) simplificada para el mapa. |
 | `src/edu_data/visor.py` y `plantillas/` | Construcción del visor estático (guía + mapa + panel por provincia). |
 | `tests/` | Tests de lectura, agregación, continuidad y datos del visor. |
-| `.github/workflows/visor.yml` | Construye el visor en GitHub Actions y lo deja como artifact (30 días). |
+| `.github/workflows/visor.yml` | Construye el visor en GitHub Actions y lo publica en GitHub Pages. |
 
 El detalle está en `data/diccionario_trayectoria.md`.
 

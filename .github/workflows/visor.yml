@@ -1,7 +1,7 @@
 name: Visor de trayectorias
 
-# Construye el visor desde los CSV crudos y lo deja como artifact temporal. Repo público: cualquier usuario
-# con sesión en GitHub puede descargarlo mientras exista. No se versiona ni se publica en GitHub Pages.
+# Construye el visor desde los CSV crudos y lo publica en GitHub Pages (sitio público).
+# Los datos procesados no se versionan: se generan en cada corrida.
 on:
   push:
     branches: [main, master]
@@ -16,6 +16,13 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
+
+# Una sola publicación a la vez; si llega otro push, se cancela la corrida anterior.
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   construir:
@@ -46,13 +53,10 @@ jobs:
       - name: Controles de calidad
         run: uv run python -m edu_data.validacion > /dev/null
 
-      - name: Subir visor
-        uses: actions/upload-artifact@v4
+      - name: Preparar sitio para Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: visor-trayectorias
           path: outputs/visor/
-          retention-days: 30
-          if-no-files-found: error
 
       - name: Subir controles de calidad
         uses: actions/upload-artifact@v4
@@ -60,3 +64,14 @@ jobs:
           name: validacion
           path: outputs/validacion_*.csv
           retention-days: 30
+
+  publicar:
+    needs: construir
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
